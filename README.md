@@ -87,7 +87,7 @@ Alternative chainings don't always make sense. The last monad is not meaningful 
 
 ## Hygiene
 
-By default, monadic generates unhygienic code. Everything you create inside lives outside the monadic scope. In addition, the last monad automatically creates the \_last variable. If you want to confine the monad in a separate scope, you can use the _hygienic_ option:
+By default, monadic generates unhygienic code. Everything you create inside lives outside the monadic scope. In addition, the last monad automatically creates the \_last variable. If you want to confine the monad to its own isolated scope, you can use the _hygienic_ option:
 
     monadic :last, hygienic: true, do
       ...
@@ -97,7 +97,7 @@ This will wrap the entire code in an anonymous lambda and execute it.
 
 ## Custom monads
 
-You use your own monads:
+You can use your own monads:
 
     monadic MyMonad do
       ...
