@@ -33,7 +33,7 @@ Error pattern can be customized:
 
 ### Last monad
 
-Stores the result of a statement in the _\_last_ variable:
+Stores the result of each statement in the _\_last_ variable:
 
     monadic :last do
       :sets.new
