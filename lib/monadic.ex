@@ -52,6 +52,7 @@ defmodule Monadic do
     cond do
       Keyword.get(options, :combine) != nil -> :combine
       Keyword.get(options, :last) != nil -> :last
+      Keyword.get(options, :state) != nil -> :state
       true -> throw("cannot determine monad")
     end
   end
@@ -62,6 +63,7 @@ defmodule Monadic do
 
   defp parse_monad(:error, _), do: Monadic.Error
   defp parse_monad(:last, _), do: Monadic.Last
+  defp parse_monad(:state, _), do: Monadic.State
   defp parse_monad(:combine, _), do: Monadic.Combine
   defp parse_monad(other, _), do: other
 

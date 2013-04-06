@@ -126,4 +126,16 @@ defmodule MonadicTest do
     end) == :error
     assert last == 3
   end
+  
+  test "state" do
+    assert (monadic state: state do
+      set {:b, 1}
+      set x = {:a, state + 1}
+      state = state + 2
+      set y = {:c, state * 3}
+      {x,y}
+    end) == {:a, :c}
+    
+    assert state == 12
+  end
 end

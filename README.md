@@ -61,6 +61,29 @@ monadic last: last do
 end
 ```
 
+### State monad
+
+Helps chaining functions which return a tuple in the form of {response, state}
+
+```elixir
+monadic :state do
+  set {:a, 1}             # ignores result (:a), stores 1 to state
+  set foo = {:b, 2}       # stores :b to foo, 2 to state
+  _state = 3              # custom state setting
+  _state = _state + 1     # _state can be referenced anywhere in expression
+  IO.puts "foo"           # doesn't affect state
+  foo                     # last expression is returned
+end
+```
+
+The name of the variable holding the state can be configured:
+
+```elixir
+monadic state: state do
+  ...
+end
+```
+
 
 ### Combine monad
 
@@ -95,7 +118,7 @@ monadic :error, chain: :dispatch do
 end
 ```
 
-Alternative chainings don't always make sense. The last monad is not meaningful in this context (since the last result is passed anyway). The combine monad might work, but I didn't test it.
+Alternative chainings don't always make sense. The last monad is not meaningful in this context (since the last result is passed anyway). The state monad also won't work. The combine monad might work, but I didn't test it.
 
 ## Hygiene
 
