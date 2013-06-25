@@ -19,6 +19,7 @@ defmodule Monadic.Error do
         [quote do
           unquote(pattern) = _err
         end],
+        [],
         quote do: _err
       }
     end
@@ -27,6 +28,7 @@ defmodule Monadic.Error do
   defp success_clause(context) do
     {
       [quote(do: __monadic_error_result__)],
+      [],
       context.continue(quote(do: __monadic_error_result__))
     }
   end
