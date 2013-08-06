@@ -16,7 +16,7 @@ defmodule Monadic.Combine do
     current.bind(output,
       context.
         state(rest).
-        next(function(__MODULE__, :next, 2))
+        next(Module.function(__MODULE__, :next, 2))
     )
   end
 

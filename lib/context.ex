@@ -19,7 +19,7 @@ defrecord Monadic.Context, [
   end
 
   def default_continue!(this) do
-    this.next(function(default_continue/2))
+    this.next(&default_continue/2)
   end
   
   def default_continue(output, __MODULE__[statements: [_]]) do
