@@ -1,7 +1,7 @@
 defmodule Monadic.Combine do
   @behaviour Monadic.Behaviour
 
-  def bind(statement, context) do
+  def bind(context, statement) do
     if (
       not is_list(context.options[:combine]) ||
       length(context.options[:combine]) < 1
@@ -9,20 +9,17 @@ defmodule Monadic.Combine do
       throw("invalid combine options")
     end
 
-    next(statement, context.state(context.options[:combine]))
+    next(%{context | state: context.options[:combine]}, statement)
   end
 
-  def next(output, Monadic.Context[state: [current | rest]] = context) do
-    current.bind(output,
-      context.
-        state(rest).
-        next(Module.function(__MODULE__, :next, 2))
-    )
+  def next(%Monadic.Context{state: [current | rest]} = context, output) do
+    %{context | state: rest, next: &__MODULE__.next/2}
+      |> current.bind(output)
   end
 
-  def next(output, context) do
-    context.
-      default_continue!.
-      continue(output)
+  def next(context, output) do
+    context
+      |> Monadic.Context.default_continue!
+      |> Monadic.Context.continue(output)
   end
 end

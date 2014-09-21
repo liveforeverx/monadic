@@ -3,7 +3,7 @@ defmodule Monadic do
     transform(monad, Keyword.put(options, :do, block), __CALLER__)
   end
 
-  defmacro monadic(options, do: block) when is_list(options) do
+  defmacro monadic(options, [do: block = {:__block__, _, _}]) when is_list(options) do
     transform(monad(options), Keyword.put(options, :do, block), __CALLER__)
   end
 
@@ -16,11 +16,11 @@ defmodule Monadic do
   end
 
   defp transform(monad, options, caller) do
-    context = Monadic.Context.new(
-      monad: parse_monad(monad, caller), 
+    context = %Monadic.Context{
+      monad: parse_monad(monad, caller),
       options: parse_options(options, caller)
-    )
-    
+    }
+
     do_transform(options[:hygienic], context)
   end
 
@@ -38,13 +38,13 @@ defmodule Monadic do
 
   defp do_transform(true, context) do
     quote do
-      (fn() -> unquote(context.transform) end).()
+      (fn() -> unquote(Monadic.Context.transform(context)) end).()
     end
   end
 
   defp do_transform(_, context) do
     quote do
-      (unquote(context.transform))
+      (unquote(Monadic.Context.transform(context)))
     end
   end
 
@@ -66,7 +66,6 @@ defmodule Monadic do
   defp parse_monad(:state, _), do: Monadic.State
   defp parse_monad(:combine, _), do: Monadic.Combine
   defp parse_monad(other, _), do: other
-
 
   defp parse_chain({:__aliases__, _, _} = module, caller) do
     Macro.expand(module, caller)

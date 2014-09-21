@@ -1,5 +1,3 @@
-Code.require_file "../test_helper.exs", __FILE__
-
 defmodule MonadicTest do
   use ExUnit.Case
   import Monadic
@@ -40,22 +38,22 @@ defmodule MonadicTest do
 
   test "error_pipe" do
     assert (monadic :error, chain: :pipeline, do: :a) == :a
-    
+
     assert (monadic :error, chain: :pipeline do
-      1 |> 
-      (fn(x) -> x + 1 end).() |> 
+      1 |>
+      (fn(x) -> x + 1 end).() |>
       (fn(x) -> x * 3 end).()
     end) == 6
 
     assert (monadic :error, chain: :pipeline do
-      1 |> 
-      (fn(_) -> :error end).() |> 
+      1 |>
+      (fn(_) -> :error end).() |>
       (fn(x) -> x * 3 end).()
     end) == :error
 
     assert (monadic :error, chain: :pipeline do
-      1 |> 
-      (fn(_) -> :error end).() |> 
+      1 |>
+      (fn(_) -> :error end).() |>
       (fn(x) -> x * 3 end).()
     end) == :error
   end
@@ -126,7 +124,7 @@ defmodule MonadicTest do
     end) == :error
     assert last == 3
   end
-  
+
   test "state" do
     assert (monadic state: state do
       set {:b, 1}
@@ -135,7 +133,8 @@ defmodule MonadicTest do
       set y = {:c, state * 3}
       {x,y}
     end) == {:a, :c}
-    
+
     assert state == 12
   end
+
 end

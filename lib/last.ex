@@ -1,10 +1,10 @@
 defmodule Monadic.Last do
   @behaviour Monadic.Behaviour
 
-  def bind(statement, context) do
+  def bind(context, statement) do
     quote do
       unquote(last(context)) = (unquote(statement))
-      unquote(context.continue(last(context)))
+      unquote(Monadic.Context.continue(context, last(context)))
     end
   end
 
